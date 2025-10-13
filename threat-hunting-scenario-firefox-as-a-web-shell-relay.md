@@ -44,37 +44,32 @@ InitiatingProcessCommandLine: setup-stub.exe -no-remote -profile "C:\Users\emplo
 
 ## Related Queries:
 ```kql
-// Installer name == tor-browser-windows-x86_64-portable-(version).exe
-// Detect the installer being downloaded
+// 1. Identify Firefox or suspicious installer download activity
 DeviceFileEvents
-| where FileName startswith "tor"
-
-// TOR Browser being silently installed
-// Take note of two spaces before the /S (I don't know why)
-DeviceProcessEvents
-| where ProcessCommandLine contains "tor-browser-windows-x86_64-portable-14.0.1.exe  /S"
-| project Timestamp, DeviceName, ActionType, FileName, ProcessCommandLine
-
-// TOR Browser or service was successfully installed and is present on the disk
-DeviceFileEvents
-| where FileName has_any ("tor.exe", "firefox.exe")
-| project  Timestamp, DeviceName, RequestAccountName, ActionType, InitiatingProcessCommandLine
-
-// TOR Browser or service was launched
-DeviceProcessEvents
-| where ProcessCommandLine has_any("tor.exe","firefox.exe")
-| project  Timestamp, DeviceName, AccountName, ActionType, ProcessCommandLine
-
-// TOR Browser or service is being used and is actively creating network connections
-DeviceNetworkEvents
-| where InitiatingProcessFileName in~ ("tor.exe", "firefox.exe")
-| where RemotePort in (9001, 9030, 9040, 9050, 9051, 9150)
-| project Timestamp, DeviceName, InitiatingProcessAccountName, InitiatingProcessFileName, RemoteIP, RemotePort, RemoteUrl
+| where FileName contains "firefox" 
+| where DeviceName == "snet"
+| project Timestamp, DeviceName, ActionType, FileName, FolderPath, SHA256, InitiatingProcessCommandLine
 | order by Timestamp desc
 
-// User shopping list was created and, changed, or deleted
+// 2. Detect malicious process executions using setup-stub or download.exe
+DeviceProcessEvents
+| where DeviceName == "snet"
+| where FileName in~ ("setup-stub.exe", "download.exe")
+| project Timestamp, DeviceName, AccountName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine, ReportId
+| order by Timestamp desc
+
+// 3. Detect Firefox deletion (possible cleanup behavior)
 DeviceFileEvents
-| where FileName contains "shopping-list.txt"
+| where FileName == "firefox.exe"
+| where ActionType == "FileDeleted"
+| project Timestamp, DeviceName, Account, InitiatingProcessCommandLine, FolderPath, SHA256
+
+// 4. Detect network activity to potential malicious endpoints
+DeviceNetworkEvents
+| where InitiatingProcessFileName in~ ("setup-stub.exe", "firefox.exe")
+| where RemoteIP has_any ("172.203.80.23")
+| project Timestamp, DeviceName, InitiatingProcessAccountName, RemoteIP, RemotePort, RemoteUrl
+| order by Timestamp desc
 ```
 
 ---
@@ -82,7 +77,7 @@ DeviceFileEvents
 ## Created By:
 - **Author Name**: Antonio Francisco
 - **Author Contact**: https://www.linkedin.com/in/antoniofrancisco-085948210/
-- **Date**: October 06, 2025
+- **Date**: October 10, 2025
 
 ## Validated By:
 - **Reviewer Name**: 
@@ -99,4 +94,4 @@ DeviceFileEvents
 ## Revision History:
 | **Version** | **Changes**                   | **Date**         | **Modified By**   |
 |-------------|-------------------------------|------------------|-------------------|
-| 1.0         | Initial draft                  | `October 06, 2025`  | `Antonio Francisco`   
+| 1.0         | Initial draft                  | `October 10, 2025`  | `Antonio Francisco`   
