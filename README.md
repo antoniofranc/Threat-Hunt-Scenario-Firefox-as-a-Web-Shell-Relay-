@@ -2,7 +2,9 @@
 
 <img width="400" src="https://github.com/user-attachments/assets/44bac428-01bb-4fe9-9d85-96cba7698bee" alt="Tor Logo with the onion and a crosshair on it"/>
 
-<img width="400" src="<img width="840" height="859" alt="image" src="https://github.com/user-attachments/assets/5097e215-767a-483b-8538-b12411f0b00d" />
+<img width="400" src="https://github.com/user-attachments/assets/5097e215-767a-483b-8538-b12411f0b00d"  alt="Firefox Logo"/>
+                        
+                        width="840" height="859" alt="image" src="https://github.com/user-attachments/assets/5097e215-767a-483b-8538-b12411f0b00d" />
 " alt="Firefox logo with crosshair"/>
 
 # Threat Hunt Report: Unauthorized TOR Usage
