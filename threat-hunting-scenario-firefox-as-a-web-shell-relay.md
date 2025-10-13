@@ -2,7 +2,7 @@
 **Detection of Unauthorized Firefox Installation and Malicious Activity on Workstation: snet**
 
 ## Steps the "Bad Actor" took Create Logs and IoCs:
-1. Download the TOR browser installer: https://www.torproject.org/download/
+1. Downloaded a modified Firefox installer disguised as a legitimate file: Firefox Installer.exe
 2. Install it silently: ```tor-browser-windows-x86_64-portable-14.0.1.exe /S```
 3. Opens the TOR browser from the folder on the desktop
 4. Connect to TOR and browse a few sites. For example:
