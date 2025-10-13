@@ -1,5 +1,5 @@
-# Threat Event (Unauthorized TOR Usage)
-**Unauthorized TOR Browser Installation and Use**
+# Threat Event (Firefox Used as a Web Shell Relay)
+**Detection of Unauthorized Firefox Installation and Malicious Activity on Workstation: snet**
 
 ## Steps the "Bad Actor" took Create Logs and IoCs:
 1. Download the TOR browser installer: https://www.torproject.org/download/
