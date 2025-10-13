@@ -1,6 +1,6 @@
 <img width="400" src="https://github.com/user-attachments/assets/5097e215-767a-483b-8538-b12411f0b00d"  alt="Firefox Logo"/>
 
-<img width="450" src="https://github.com/user-attachments/assets/06701f92-d410-4a48-b8b5-eba364812972" />
+<img width="400" src="https://github.com/user-attachments/assets/06701f92-d410-4a48-b8b5-eba364812972" />
 
                         
 
