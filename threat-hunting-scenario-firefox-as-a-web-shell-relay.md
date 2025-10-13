@@ -8,16 +8,11 @@
 4. Multiple dropper executions occurred via ```download.exe``` in quick succession, indicating staged infection:                                    ```"download.exe" /LaunchedFromStub /INI=C:\Users\EMPLOY~1\AppData\Local\Temp\nskC4FD.tmp\config.ini
 "download.exe" /LaunchedFromStub /INI=C:\Users\EMPLOY~1\AppData\Local\Temp\nso90D.tmp\config.ini
 "download.exe" /LaunchedFromStub /INI=C:\Users\EMPLOY~1\AppData\Local\Temp\nss9E77.tmp\config.ini```
-
-5. Opens the TOR browser from the folder on the desktop
-6. Connect to TOR and browse a few sites. For example:
-   - **WARNING: The links to onion sites change a lot and these have changed. However if you connect to Tor and browse around normal sites a bit, the necessary logs should still be created:**
-   - Current Dread Forum: ```dreadytofatroptsdj6io7l3xptbet6onoyno2yv7jicoxknyazubrad.onion```
-   - Dark Markets Forum: ```dreadytofatroptsdj6io7l3xptbet6onoyno2yv7jicoxknyazubrad.onion/d/DarkNetMarkets```
-   - Current Elysium Market: ```elysiumutkwscnmdohj23gkcyp3ebrf4iio3sngc5tvcgyfp4nqqmwad.top/login```
-
-7. Create a folder on your desktop called ```tor-shopping-list.txt``` and put a few fake (illicit) items in there
-8. Delete the file.
+5. ```Firefox.exe``` was later deleted from the installation directory to remove evidence:                                                              ```ActionType: FileDeleted
+FileName: firefox.exe
+FolderPath: C:\Program Files\Mozilla Firefox\
+InitiatingProcessCommandLine: setup-stub.exe -no-remote -profile "C:\Users\employee0\Downloads\Temp\MalProfile" http://172.203.80.23/admin/shell.php```
+6. These actions created multiple temporary and malicious profile directories ```(Temp\MalProfile)``` to host payloads and connect to remote command servers.
 
 ---
 
@@ -25,20 +20,20 @@
 | **Parameter**       | **Description**                                                              |
 |---------------------|------------------------------------------------------------------------------|
 | **Name**| DeviceFileEvents|
-| **Info**|https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-deviceinfo-table|
-| **Purpose**| Used for detecting TOR download and installation, as well as the shopping list creation and deletion. |
+| **Info**|https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-devicefileevents-table|
+| **Purpose**| Used to detect Firefox installer downloads, temporary profile creation, and file deletion (covering tracks). |
 
 | **Parameter**       | **Description**                                                              |
 |---------------------|------------------------------------------------------------------------------|
 | **Name**| DeviceProcessEvents|
 | **Info**|https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-deviceinfo-table|
-| **Purpose**| Used to detect the silent installation of TOR as well as the TOR browser and service launching.|
+| **Purpose**| Used to detect ```download.exe```, ```setup-stub.exe```, and malicious command-line arguments used to install and execute payloads.|
 
 | **Parameter**       | **Description**                                                              |
 |---------------------|------------------------------------------------------------------------------|
 | **Name**| DeviceNetworkEvents|
 | **Info**|https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-devicenetworkevents-table|
-| **Purpose**| Used to detect TOR network activity, specifically tor.exe and firefox.exe making connections over ports to be used by TOR (9001, 9030, 9040, 9050, 9051, 9150).|
+| **Purpose**| Used to detect external web connections initiated by Firefox and setup-stub to remote IPs (e.g., 172.203.80.23).|
 
 ---
 
