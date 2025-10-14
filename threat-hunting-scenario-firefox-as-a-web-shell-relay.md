@@ -74,7 +74,6 @@ DeviceNetworkEvents
 | where DeviceName == "snet"
 | where InitiatingProcessFileName in~ ("setup-stub.exe", "firefox.exe")
 | where RemoteUrl has_any ("shell.php", "exploit.zip") 
-      or RemoteIP has_any ("[ATTACKER-IP]")
 | project Timestamp, DeviceName, InitiatingProcessAccountName, InitiatingProcessFileName, RemoteIP, RemotePort, RemoteUrl
 | order by Timestamp desc
 ```
