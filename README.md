@@ -84,11 +84,19 @@ DeviceProcessEvents
 
 ---
 
-### 3. Searched the `DeviceProcessEvents` Table for Setup and Command Execution
+### 3. Searched the `DeviceProcessEvents` Table for Dropper Activity
 
-I searched the DeviceProcessEvents table for any malicious command-line activity by user "employee0" and identified three separate executions of `download.exe` from randomized temporary directories. Each instance used the `/LaunchedFromStub` parameter and executed within rapid succession.
+To complete my investigation, I searched the `DeviceProcessEvents` table for any malicious command-line activity involving `download.exe` executed by user "employee0". This query uncovered a sophisticated multi-stage dropper operation.
 
-The pattern of random temporary folder names combined with quick sequential execution provides strong indicators of automated malware dropper activity, designed specifically to evade detection while establishing persistence on the compromised system.
+I identified three separate executions of `download.exe` from randomized temporary directories, each occurring in rapid succession:
+- First execution at `05:11:57Z` from `C:\Users\employee0\AppData\Local\Temp\nskC4FD.tmp\download.exe`
+- Second execution at `05:54:48Z` from `C:\Users\employee0\AppData\Local\Temp\nso90D.tmp\download.exe` (SHA256: `b5284b0e4a5f867a1342a4bc5a7ca21b9c13c49bea1b48624b691473d14dec78`)
+- Third execution at `05:55:31Z` from `C:\Users\employee0\AppData\Local\Temp\nss9E77.tmp\download.exe`
+  
+Each instance executed with the `/LaunchedFromStub` parameter and referenced a corresponding `config.ini` file from the same temporary directory. The pattern of randomized temporary folder names (nskC4FD.tmp, nso90D.tmp, nss9E77.tmp) combined with quick sequential execution within a 44-minute timeframe provided strong indicators of automated malware dropper activity.
+
+This dropper behavior was clearly designed to evade detection through randomization while establishing persistence and downloading additional malicious payloads onto the compromised system. Each execution was followed by temporary Firefox file creation and subsequent cleanup operations to remove forensic evidence.
+
 **Query used to locate events:**
 
 ```kql
