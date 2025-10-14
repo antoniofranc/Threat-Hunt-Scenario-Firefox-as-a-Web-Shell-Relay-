@@ -45,31 +45,37 @@ Each executed with: `/LaunchedFromStub /INI=[temp_path]\config.ini`
 
 ## Related Queries:
 ```kql
-// 1. Identify Firefox or suspicious installer download activity
+// 1. Identify Firefox installer downloads and suspicious file activity
 DeviceFileEvents
-| where FileName contains "firefox" 
 | where DeviceName == "snet"
+| where FileName contains "firefox" 
+| where InitiatingProcessAccountName == "employee0"
 | project Timestamp, DeviceName, ActionType, FileName, FolderPath, SHA256, InitiatingProcessCommandLine
 | order by Timestamp desc
 
-// 2. Detect malicious process executions using setup-stub or download.exe
+// 2. Detect malicious process executions (setup-stub.exe and download.exe)
 DeviceProcessEvents
 | where DeviceName == "snet"
 | where FileName in~ ("setup-stub.exe", "download.exe")
-| project Timestamp, DeviceName, AccountName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine, ReportId
+| where AccountName == "employee0"
+| project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine, SHA256
 | order by Timestamp desc
 
-// 3. Detect Firefox deletion (possible cleanup behavior)
+// 3. Detect firefox.exe deletion (anti-forensics activity)
 DeviceFileEvents
+| where DeviceName == "snet"
 | where FileName == "firefox.exe"
 | where ActionType == "FileDeleted"
-| project Timestamp, DeviceName, Account, InitiatingProcessCommandLine, FolderPath, SHA256
+| where FolderPath contains "Mozilla Firefox"
+| project Timestamp, DeviceName, InitiatingProcessAccountName, InitiatingProcessCommandLine, FolderPath, SHA256
 
-// 4. Detect network activity to potential malicious endpoints
+// 4. Detect network connections to malicious endpoints
 DeviceNetworkEvents
+| where DeviceName == "snet"
 | where InitiatingProcessFileName in~ ("setup-stub.exe", "firefox.exe")
-| where RemoteIP has_any ("172.203.80.23")
-| project Timestamp, DeviceName, InitiatingProcessAccountName, RemoteIP, RemotePort, RemoteUrl
+| where RemoteUrl has_any ("shell.php", "exploit.zip") 
+      or RemoteIP has_any ("[ATTACKER-IP]")
+| project Timestamp, DeviceName, InitiatingProcessAccountName, InitiatingProcessFileName, RemoteIP, RemotePort, RemoteUrl
 | order by Timestamp desc
 ```
 
