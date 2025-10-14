@@ -19,7 +19,7 @@ The installation was initiated through a malicious stub file that attempted to l
 This behavior strongly indicates unauthorized browser installation and potential remote access activity through web shell relay techniques.
 
 
-### High-Level TOR-Related IoC Discovery Plan
+### High-Level Firefox-Related IoC Discovery Plan
 
 - **Check `DeviceFileEvents`** for creation or deletion of `firefox.exe` or related stub installers.
 - **Check `DeviceProcessEvents`** for suspicious Firefox process launches with command-line flags.
