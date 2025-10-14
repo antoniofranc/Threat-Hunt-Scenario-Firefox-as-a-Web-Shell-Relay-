@@ -58,20 +58,20 @@ DeviceFileEvents
 
 ---
 
-### 2. Searched the `DeviceProcessEvents` Table
+### 2. Searched the `DeviceProcessEvents` Table Firefox Launch Parameters
 
-I searched the DeviceProcessEvents table for any ProcessCommandLine containing the string "tor-browser-windows-x86_64-portable-14.5.7.exe". Based on the returned logs, at October 5, 2025, 01:18:04 UTC (2025-10-05T01:18:04.9518825Z), an employee using the "walnet" device executed the Tor Browser portable installer (version 14.5.7) from their Downloads folder using a silent installation flag (/S) that bypasses all user prompts and installs the software automatically without visible interaction.
+I searched the DeviceProcessEvents table for any ProcessCommandLine containing the string `setup-stub.exe`. Based on the returned logs, The stub executed Firefox in non-interactive (no-remote) mode with a temporary malicious profile named `MalProfile`.
+The command also contained a direct HTTP reference to `/admin/shell.php`, indicating a potential reverse shell or web shell callback. 
 
 **Query used to locate event:**
 
 ```kql
-
-DeviceProcessEvents  
-| where DeviceName == "walnet"  
-| where ProcessCommandLine contains "tor-browser-windows-x86_64-portable-14.0.1.exe"  
+DeviceProcessEvents
+| where DeviceName == "snet"
+| where ProcessCommandLine contains "setup-stub.exe" 
 | project Timestamp, DeviceName, AccountName, ActionType, FileName, FolderPath, SHA256, ProcessCommandLine
 ```
-<img width="1407" height="74" alt="image" src="https://github.com/user-attachments/assets/28125609-9f4e-42a5-ad18-d840c60bdabe" />
+<img width="1680" height="293" alt="image" src="https://github.com/user-attachments/assets/a9cb616c-62e2-41d8-ab77-9ed6de0da1af" />
 
 
 ---
