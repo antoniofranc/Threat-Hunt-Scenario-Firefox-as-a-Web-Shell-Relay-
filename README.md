@@ -219,9 +219,11 @@ Final cleanup
 
 ## Summary
 
-On October 12, 2025, user employee0 on endpoint snet executed a multi-stage attack that weaponized the Firefox browser. The attack began at 01:11:56 AM with a silent installer and proceeded through a series of dropper executions `(download.exe)`. The primary tactic, observed at 01:55:20 AM, involved using `setup-stub.exe` to launch Firefox with command-line arguments designed to connect to a web shell `(/admin/shell.php)` and download a malicious payload `(exploit.zip)`. The attacker then attempted to cover their tracks at 01:55:24 AM by deleting the main Firefox executable. The hunt successfully confirmed the initial hypothesis that Firefox was being abused as a covert relay for malicious web communication.
+On October 12, 2025, user employee0 on endpoint snet was compromised in a multi-stage attack that weaponized Firefox as a covert command-and-control relay. The attack began at 04:29:57 UTC with a trojanized Firefox installer download.
 
+The malicious activity escalated through three dropper execution chains using `download.exe` between 05:11:57 UTC and 05:55:31 UTC. At 05:55:21 UTC, `setup-stub.exe` launched Firefox in headless mode with a malicious profile, establishing direct connections to a web shell at `http://172.203.80.23/admin/shell.php` and an exploit package at `http://172.203.80.23/exploit.zip`.
 
+At 05:55:24 UTC, the legitimate Firefox executable was deleted to cover tracks. The threat hunt successfully confirmed that Firefox was exploited as a covert relay for web shell communication, enabling remote command execution and persistent access to the compromised endpoint.
 
 
 ---
