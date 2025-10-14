@@ -57,12 +57,20 @@ DeviceFileEvents
 
 ---
 
-### 2. Searched the `DeviceProcessEvents` Table Firefox Launch Parameters
+### 2. Searched the `DeviceProcessEvents` Table for Malicious Process Execution
 
-I searched the DeviceProcessEvents table for any ProcessCommandLine containing the string `setup-stub.exe`. Based on the returned logs, The stub executed Firefox in non-interactive (no-remote) mode with a temporary malicious profile named `MalProfile`.
-The command also contained a direct HTTP reference to `/admin/shell.php`, indicating a potential reverse shell or web shell callback. 
-Further investigation revealed setup-stub.exe launching Firefox with malicious arguments, linking directly to remote payloads.
+Next, I pivoted to the `DeviceProcessEvents` table to investigate the execution patterns of `setup-stub.exe`. I specifically searched for any `ProcessCommandLine` containing the string "setup-stub.exe" to understand how Firefox was being weaponized.
 
+The results revealed multiple executions of `setup-stub.exe` with the same malicious SHA256 hash: `181baa1380e339d8acb6b067c33dd36a5f56e57ee05f7e524b752affaafa75ac`.
+I discovered that the stub was launching Firefox in non-interactive mode using the `-no-remote` parameter along with a custom malicious profile named `MalProfile`.
+
+What made this particularly concerning was the discovery of three distinct remote payload URLs being accessed:
+- At `05:54:42Z`: Connection to `http://192.168.1.100/exploit.zip`
+- At `05:55:21Z`: Critical finding - Direct connection to `http://172.203.80.23/admin/shell.php (web shell)`
+- At `05:55:21Z`: Secondary connection to `http://172.203.80.23/exploit.zip`
+
+These command-line parameters clearly showed that Firefox was being used as a relay mechanism to establish communication with a remote web shell, allowing the attacker to execute commands on the compromised system.
+  
 **Query used to locate event:**
 
 ```kql
