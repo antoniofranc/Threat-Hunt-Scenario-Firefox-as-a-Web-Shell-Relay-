@@ -3,7 +3,7 @@
 
 ## Steps the "Bad Actor" took Create Logs and IoCs:
 
-1 - Initial Compromise: Downloaded a trojanized Firefox installer disguised as a legitimate file (`Firefox Installer.exe`) to `C:\Users\employee0\Downloads\` at 04:29:57 UTC from what appeared to be Mozilla's official CDN.
+1. Initial Compromise: Downloaded a trojanized Firefox installer disguised as a legitimate file (`Firefox Installer.exe`) to `C:\Users\employee0\Downloads\` at 04:29:57 UTC from what appeared to be Mozilla's official CDN.
 
 ---
 
