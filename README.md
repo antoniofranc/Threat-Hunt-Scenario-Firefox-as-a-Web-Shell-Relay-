@@ -62,6 +62,7 @@ DeviceFileEvents
 
 I searched the DeviceProcessEvents table for any ProcessCommandLine containing the string `setup-stub.exe`. Based on the returned logs, The stub executed Firefox in non-interactive (no-remote) mode with a temporary malicious profile named `MalProfile`.
 The command also contained a direct HTTP reference to `/admin/shell.php`, indicating a potential reverse shell or web shell callback. 
+Further investigation revealed setup-stub.exe launching Firefox with malicious arguments, linking directly to remote payloads.
 
 **Query used to locate event:**
 
@@ -76,20 +77,20 @@ DeviceProcessEvents
 
 ---
 
-### 3. Searched the `DeviceProcessEvents` Table for TOR Browser Execution
+### 3. Searched the `DeviceProcessEvents` Table for Setup and Command Execution
 
-I searched the DeviceProcessEvents table for any indication that user "walnet" actually opened the Tor Browser. Evidence confirmed that the Tor Browser was launched on October 5, 2025, 01:19:20 UTC (2025-10-05T01:19:20.8474222Z). Multiple subsequent instances of firefox.exe (the Tor Browser executable) and tor.exe (the Tor network daemon) were spawned following the initial launch, indicating active and sustained use of the Tor Browser.
+I searched the DeviceProcessEvents table for any indication that user "employee0" executed malicious arguments. Evidence confirmed that Detected three executions of download.exe from random temporary directories — strong indicators of malware dropper activity. Each process used /LaunchedFromStub and executed within seconds.
+
 
 **Query used to locate events:**
 
 ```kql
-DeviceProcessEvents  
-| where DeviceName == "walnet"  
-| where FileName has_any ("tor.exe", "firefox.exe", "tor-browser.exe")  
-| project Timestamp, DeviceName, AccountName, ActionType, FileName, FolderPath, SHA256, ProcessCommandLine  
-| order by Timestamp desc
+DeviceProcessEvents
+| where DeviceName == "snet"
+| where ProcessCommandLine contains "download.exe"
+| project Timestamp, DeviceName, AccountName, ActionType, FileName, FolderPath, SHA256, ProcessCommandLine
 ```
-<img width="1431" height="522" alt="image" src="https://github.com/user-attachments/assets/8938aad7-e359-4f7e-90ff-024d14bb8247" />
+<img width="1883" height="224" alt="image" src="https://github.com/user-attachments/assets/10195357-95fe-4df4-8a1d-23714e7db048" />
 
 
 ---
