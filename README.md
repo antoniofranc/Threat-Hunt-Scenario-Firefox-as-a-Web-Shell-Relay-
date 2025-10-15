@@ -215,21 +215,23 @@ DeviceProcessEvents
 - **Event:**: `Temporary firefox.exe files`
 Final cleanup
 ---
+Attack Chain Flow
+
                                      ┌─────────────────────────────────────────────────────────────────┐
-                                     |   T1566.002 (Phishing: Spearphishing Attachment)                |
-                                     │    Trojanized Firefox installer downloaded                      │
-                                     └────────────────────────┬────────────────────────────────────────┘
-                                                              ↓
-┌─────────────────────────────────────────────────────────────────┐
-│ T1204.002 (User Execution: Malicious File)                     │
-│ Employee0 executes Firefox Installer.exe                       │
-└────────────────────────┬────────────────────────────────────────┘
-                         ↓
-┌─────────────────────────────────────────────────────────────────┐
-│ T1106 (Native API) + T1559.002 (IPC: Shared Memory)           │
-│ setup-stub.exe spawns firefox.exe with malicious parameters    │
-└────────────────────────┬────────────────────────────────────────┘
-                         ↓
+                                     |       T1566.002 (Phishing: Spearphishing Attachment)            |
+                                     │         Trojanized Firefox installer downloaded                 │
+                                     └─────────────────────────────┬───────────────────────────────────┘
+                                                                   ↓
+                                     ┌─────────────────────────────────────────────────────────────────┐
+                                     │        T1204.002 (User Execution: Malicious File)               │
+                                     |          Employee0 executes Firefox Installer.exe               │
+                                     └─────────────────────────────┬───────────────────────────────────┘
+                                                                   ↓
+                                     ┌─────────────────────────────────────────────────────────────────┐
+                                     │    T1106 (Native API) + T1559.002 (IPC: Shared Memory)          │
+                                     │ setup-stub.exe spawns firefox.exe with malicious parameters     │
+                                     └─────────────────────────────┬───────────────────────────────────┘
+                                                                   ↓                                     
 ┌─────────────────────────────────────────────────────────────────┐
 │ T1036.004 + T1036.005 (Masquerading)                           │
 │ Temporary directories (7zS*, nsk*.tmp) hide malicious files    │
