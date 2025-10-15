@@ -215,11 +215,11 @@ DeviceProcessEvents
 - **Event:**: `Temporary firefox.exe files`
 Final cleanup
 ---
-┌─────────────────────────────────────────────────────────────────┐
-│ T1566.002 (Phishing: Spearphishing Attachment)                 │
-│ Trojanized Firefox installer downloaded                         │
-└────────────────────────┬────────────────────────────────────────┘
-                         ↓
+                                     ┌─────────────────────────────────────────────────────────────────┐
+                                     |   T1566.002 (Phishing: Spearphishing Attachment)                |
+                                     │    Trojanized Firefox installer downloaded                      │
+                                     └────────────────────────┬────────────────────────────────────────┘
+                                                              ↓
 ┌─────────────────────────────────────────────────────────────────┐
 │ T1204.002 (User Execution: Malicious File)                     │
 │ Employee0 executes Firefox Installer.exe                       │
