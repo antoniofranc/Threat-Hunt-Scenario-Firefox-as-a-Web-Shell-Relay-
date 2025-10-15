@@ -76,6 +76,11 @@ What made this particularly concerning was the discovery of three distinct remot
 - At `05:55:21Z`: Secondary connection to `http://172.203.80.23/exploit.zip`
 
 These command-line parameters clearly showed that Firefox was being used as a relay mechanism to establish communication with a remote web shell, allowing the attacker to execute commands on the compromised system.
+
+MITRE ATT&CK Techniques Detected:
+
+- T1071.001 - Application Layer Protocol: Web Protocols
+- T1547.014 - Boot or Logon Autostart Execution: Browser Extensions
   
 **Query used to locate event:**
 
@@ -102,6 +107,10 @@ I identified three separate executions of `download.exe` from randomized tempora
 Each instance executed with the `/LaunchedFromStub` parameter and referenced a corresponding `config.ini` file from the same temporary directory. The pattern of randomized temporary folder names (nskC4FD.tmp, nso90D.tmp, nss9E77.tmp) combined with quick sequential execution within a 44-minute timeframe provided strong indicators of automated malware dropper activity.
 
 This dropper behavior was clearly designed to evade detection through randomization while establishing persistence and downloading additional malicious payloads onto the compromised system. Each execution was followed by temporary Firefox file creation and subsequent cleanup operations to remove forensic evidence.
+
+MITRE ATT&CK Techniques Detected:
+- T1047.001 - Boot or Logon Autostart Execution: Registry Run Keys
+- T1041 - Exfiltration Over C2 Channel
 
 **Query used to locate events:**
 
