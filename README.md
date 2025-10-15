@@ -38,10 +38,11 @@ As I continued analyzing the file events, I discovered critical evidence of a de
 This command line was particularly alarming because it contained a direct HTTP reference to `/admin/shell.php`, strongly indicating web shell activity. Additionally, I noticed the creation and subsequent deletion of temporary folders named `Temp` and `MalProfile` in the Downloads directory, suggesting an attempt to cover tracks.
 
 MITRE ATT&CK Techniques Detected:
-- T1566.002 - Phishing: Spearphishing Attachment
 - T1036.004 - Masquerading: Masquerade File Type
-- T1036.005 - Masquerading: Match Legitimate Name or Location
 - T1562.001 - Impair Defenses: Disable or Modify Tools
+
+
+
 **Query used to locate events:**
 
 ```kql
